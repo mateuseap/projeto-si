@@ -23,20 +23,19 @@ function draw() {
   
   drawAgent(agent);
   drawTarget(target);
-
-
 }
 
 function createRandomVector(grid) {
-  const cellWidth = width / columns;
-  const cellHeight = height / rows;
+  const cellWidth = width / columns; //tentei inicializar como global mas o p5 nao deixa
+  const cellHeight = height / rows; 
   let x, y;
   
   do {
     x = floor(random(0, columns));
     y = floor(random(0, rows));
-  } while (grid[y][x] === 3);
+  } while (grid[y][x] === 3); // se gerar em um obstaculo, regera
 
+  // calcular o pixel certo da célula correspondente no canvas
   x = cellWidth * (x + 0.5);
   y = cellHeight * (y + 0.5);
   
@@ -50,6 +49,7 @@ function drawAgent(agent) {
 
 function drawTarget(target) {
   fill('#ff8c00');
+  //tentar generalizar os dois raios da estrela de acordo com o tamanho da célula do grid (caso a     gente mude o tamanho dele)
   star(target.x, target.y, 6, 12, 5);
 }
 
@@ -81,10 +81,13 @@ function drawGrid() {
       const cellX = j * cellWidth;
       const cellY = i * cellHeight;
       
+      // ramdomiza um dos 4 terrenos
       let terrain = floor(random(0, 4));
       
+      // guarda o terreno no grid
       info[i][j] = terrain;
       
+      // desenha
       fill(terrains[terrain]);
       rect(cellX, cellY, cellWidth, cellHeight);
     }
