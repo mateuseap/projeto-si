@@ -35,22 +35,30 @@ function createRandomVector(grid) {
     y = floor(random(0, rows));
   } while (grid[y][x] === 3); // se gerar em um obstaculo, regera
 
+  return createVector(x, y);
+}
+
+function gridToCanvas(x, y) {
+  const cellWidth = width / columns; //tentei inicializar como global mas o p5 nao deixa
+  const cellHeight = height / rows;
+  
   // calcular o pixel certo da célula correspondente no canvas
   x = cellWidth * (x + 0.5);
   y = cellHeight * (y + 0.5);
   
-  return createVector(x, y);
+  return {x, y};
 }
 
 function drawAgent(agent) {
   fill(255, 0, 0);
-  circle(agent.x, agent.y, (3*height) / (4*rows));
+  const {x, y} = gridToCanvas(agent.x, agent.y);
+  circle(x, y, (3*height) / (4*rows));
 }
 
 function drawTarget(target) {
   fill('#ff8c00');
-  //tentar generalizar os dois raios da estrela de acordo com o tamanho da célula do grid (caso a     gente mude o tamanho dele)
-  star(target.x, target.y, 6, 12, 5);
+  const {x, y} = gridToCanvas(target.x, target.y);
+  star(x, y, 6, 12, 5);
 }
 
 function star(x, y, radius1, radius2, npoints) {
