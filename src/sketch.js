@@ -41,19 +41,6 @@ function draw() {
       drawUniCost();
       break;
   }
-  
-  /*const grid = drawGrid();
-  
-  const agent = createRandomVector(grid);
-  const target = createRandomVector(grid);
-  
-  drawAgent(agent);
-  drawTarget(target);
-  
-  bfs(agent, grid);
-  
-  drawAgent(agent);
-  drawTarget(target);*/
 }
 
 function drawMenu() {
@@ -122,6 +109,8 @@ function drawBFS() {
   
   drawAgent(agent);
   drawTarget(target);
+  
+  findPath(bfs(agent, target, grid), agent, target);
 }
 
 function drawDFS() {
@@ -153,29 +142,62 @@ function mouseInArea(x, y, width, height) {
   return mouseX >= x && mouseX <= (x + width) && mouseY >= y && mouseY <= (y + height);
 }
 
-function bfs(agent, grid) {
+function findPath(cameFrom, agent, target) {
+  let path = [];
+  let agentCell = [agent.y, agent.x];
+  let targetCell = [target.y, target.x];
+  let currCell = targetCell;
+  drawPath(currCell[0], currCell[1]);
+  path.push(currCell);
+  
+  while(currCell[0] != agentCell[0] || currCell[1] != agentCell[1]) {
+    currCell = cameFrom[currCell];
+    path.push(currCell);
+    drawPath(currCell[0], currCell[1]);
+  }
+  
+  drawTarget(target);
+  drawAgent(agent);
+  
+  return path;
+}
+
+function bfs(agent, target, grid) {
   let frontier = Array(); //unshift() e pop() para utilizar como fila
+  let cameFrom = {}
   frontier.unshift([agent.y, agent.x]); // start position
-  //drawFrontier(agent.y, agent.x);
+  cameFrom[[agent.y, agent.x]] = undefined;
   let visited = Array(rows).fill().map(() => Array(columns).fill(false));
   
   while (frontier.length !== 0) {
     const [curri, currj] = frontier.pop();
-    //drawNoFrontier(curri, currj);
     const neighbors = adjacentCells(curri, currj);
 
+    if ([curri, currj] ===  [target.y, target.x]) break; 
+    
     neighbors.forEach((neigh) => {
-      neighi = neigh[0]
-      neighj = neigh[1]
+      neighi = neigh[0];
+      neighj = neigh[1];
       if(!visited[neighi][neighj] && grid[neighi][neighj] != 3) {
         visited[neighi][neighj] = true;
         frontier.unshift([neighi, neighj]);
-        //drawFrontier(neighi, neighj);
+        cameFrom[[neighi, neighj]] = [curri, currj];
       }
     })
   }
   
+  
   console.log(visited);
+  return cameFrom;
+}
+
+function drawPath(i, j) {
+  const cellWidth = width / columns; //tentei inicializar como global mas o p5 nao deixa
+  const cellHeight = height / rows;
+  const cellX = j * cellWidth;
+  const cellY = i * cellHeight;
+  fill(0, 0, 240);
+  rect(cellX, cellY, cellWidth, cellHeight);
 }
 
 function drawFrontier(i, j) {
