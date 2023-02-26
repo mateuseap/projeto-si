@@ -25,12 +25,14 @@ class Grid {
   drawAgent(i, j) {
     fill(255, 0, 0);
     const { x, y } = this.gridToCanvas(i || this.agent.x, j || this.agent.y);
-    circle(x, y, (3 * height) / (4 * rows));
+
+    return circle(x, y, (3 * height) / (4 * rows));
   }
 
   drawTarget(i, j) {
     fill('#ff8c00');
     const { x, y } = this.gridToCanvas(i || this.target.x, j || this.target.y);
+
     this.star(x, y, 6, 12, 5);
   }
 

@@ -1,6 +1,5 @@
 class Algorithm {
   defaultTimeout = 1000;
-  searchTimeout = 0;
   directions = [
     [-1, 0],
     [0, -1],
@@ -22,6 +21,8 @@ class Algorithm {
     this.visited = Array(this.grid.rows)
       .fill()
       .map(() => Array(this.grid.columns).fill(false));
+
+    this.lastAgentSpot = null;
   }
 
   drawFrontierOrPath(i, j, timeoutMS = 0, ...rgbFill) {
@@ -33,27 +34,55 @@ class Algorithm {
   }
 
   startSearch() {
-    this.grid.drawAgent();
+    this.lastAgentSpot = this.grid.drawAgent();
     this.grid.drawTarget();
   }
 
   endSearch(gapMS) {
-    setTimeout(() => {
-      const path = this.findPath(this.cameFrom);
+    setTimeout(this.drawPathTimeout.bind(this), this.searchTimeout + gapMS);
+  }
 
-      const stepSize = 100;
-      let stepsLeft = path.length;
+  drawPathTimeout() {
+    const path = this.findPath(this.cameFrom);
 
-      path.map(([i, j]) => {
-        setTimeout(() => {
-          const { x, y } = createVector(j, i);
+    const stepSize = 100;
+    const costStep = 115;
+    let costStepMSAcc = 0;
 
-          this.grid.drawAgent(x, y);
-        }, this.lastTimeout * this.countCells + stepSize * (stepsLeft + 1));
+    path.reverse().forEach(([i, j], index) => {
+      const isLast = index + 1 === path.length;
+      costStepMSAcc += costStep * this.grid.info[j][i];
+      setTimeout(
+        this.drawAgentToTargetSpot.bind(this),
+        this.lastTimeout * this.countCells + stepSize * index,
+        i,
+        j,
+        costStepMSAcc,
+        isLast
+      );
+    });
+  }
 
-        stepsLeft -= 1;
-      });
-    }, this.searchTimeout + gapMS);
+  async drawAgentToTargetSpot(i, j, costStepMSAcc, isLast) {
+    await sleep(costStepMSAcc).then(() => {
+      this.lastAgentSpot.erase();
+      // Se for fazer com outra cor sem ser branca:
+      /* 
+      const { x, y } = this.grid.gridToCanvas(this.grid.agent.x, this.grid.agent.y);
+      this.lastAgentSpot.fill(0, 210, 0, 100);
+      this.lastAgentSpot.circle(x, y, (3 * height) / (4 * rows)); 
+      */
+
+      this.grid.agent = createVector(j, i);
+      this.lastAgentSpot = this.grid.drawAgent();
+
+      if (isLast) {
+        targetCollected += 1;
+        // Faz as coisas e reinicia, talvez um sleep aqui faça sentido também
+        // clear();
+        // loop();
+      }
+    });
   }
 
   adjacentCells(i, j) {

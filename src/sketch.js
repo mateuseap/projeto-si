@@ -7,10 +7,13 @@ const terrains = {
   3: '#565656', // obstaculo custo infinito
 };
 
+let targetCollected = 0;
 let state = 0;
 let menu;
 let grid;
 let states;
+
+const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 function setup() {
   createCanvas(800, 800);
@@ -22,6 +25,7 @@ function setup() {
 function draw() {
   background(0);
   strokeWeight(0.5);
+  console.log(state);
 
   if (!state) state = menu.drawMenu();
   else {

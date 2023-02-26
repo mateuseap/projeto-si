@@ -4,14 +4,12 @@ class BFS extends Algorithm {
   }
 
   bfs() {
-    let index = 0;
     while (this.frontier.length) {
       const [curri, currj] = this.frontier.pop();
 
       const neighbors = this.adjacentCells(curri, currj);
-      
+
       this.drawFrontierOrPath(curri, currj, this.searchTimeout);
-      index++;
 
       if (curri === this.grid.target.y && currj === this.grid.target.x) break;
 
@@ -33,12 +31,6 @@ class BFS extends Algorithm {
       try {
         this.startSearch();
         this.bfs();
-
-        const cameFromArr = Object.entries(this.cameFrom);
-        this.searchTimeout += incrementTimeout * cameFromArr.length;
-
-
-
         this.endSearch(gapMS);
 
         break;

@@ -4,20 +4,19 @@ class DFS extends Algorithm {
   }
 
   dfs() {
-    
     let [oldi, oldj] = [-1, -1];
     let [curri, currj] = [-1, -1];
     while (this.frontier.length) {
       [oldi, oldj] = [curri, currj];
-      [curri, currj] = this.frontier.pop();    
-      
+      [curri, currj] = this.frontier.pop();
+
       this.drawFrontierOrPath(curri, currj, this.searchTimeout);
-      if(oldi != -1 && oldj != -1){
+      if (oldi != -1 && oldj != -1) {
         this.drawFrontierOrPath(oldi, oldj, this.searchTimeout, 255, 255, 255);
       }
-      
+
       const neighbors = this.adjacentCells(curri, currj);
-      
+
       neighbors.forEach(neigh => {
         const neighi = neigh[0];
         const neighj = neigh[1];
@@ -36,11 +35,6 @@ class DFS extends Algorithm {
       try {
         this.startSearch();
         this.dfs();
-
-        const cameFromArr = Object.entries(this.cameFrom);
-        this.searchTimeout += incrementTimeout * cameFromArr.length;
-
-
         this.endSearch(gapMS);
 
         break;
