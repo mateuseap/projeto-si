@@ -1,57 +1,32 @@
 const rows = 35;
 const columns = 35;
-const defaultTimeout = 1000;
 const terrains = {
-      0: '#DCCBB5', // areia menor custo
-      1: '#869818', // pantano custo medio
-      2: '#3399CC', // agua maior custo
-      3: '#565656', // obstaculo custo infinito
-    };
-let searchTimeout = 0;
+  0: '#DCCBB5', // areia menor custo
+  1: '#869818', // pantano custo medio
+  2: '#3399CC', // agua maior custo
+  3: '#565656', // obstaculo custo infinito
+};
 
 let state = 0;
 let menu;
-let algorithm;
 let grid;
+let states;
 
 function setup() {
   createCanvas(800, 800);
   menu = new Menu(terrains);
   grid = new Grid(rows, columns, terrains);
-  algorithm = new Algorithm(grid);
+  states = { 1: BFS, 2: DFS };
 }
 
 function draw() {
   background(0);
   strokeWeight(0.5);
-  searchTimeout = defaultTimeout;
 
-  if(!state) state = menu.drawMenu();
-  else algorithm.drawSearch(state); 
-  
+  if (!state) state = menu.drawMenu();
+  else {
+    noLoop();
+    const algorithm = new states[state](grid);
+    algorithm.runSearch();
+  }
 }
-
-
-function drawDFS() {}
-
-function drawGreedy() {}
-
-function drawAstar() {}
-
-function drawUniCost() {}
-
-
-function drawFrontier(i, j) {
-  fill(0, 0, 255);
-  rect(...getCellsProps(i, j));
-}
-
-function drawNoFrontier(i, j) {
-  fill(255, 255, 0);
-  rect(...getCellsProps(i, j));
-}
-
-
-
-
-
