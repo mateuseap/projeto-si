@@ -2,11 +2,13 @@ class BFS {
   constructor(grid){
     this.grid = grid;
     this.cameFrom = { [[this.grid.agent.y, this.grid.agent.x]]: undefined };
+    this.frontierResult = [];
   }
   
   bfs() {
     // start position
     const frontier = [[this.grid.agent.y, this.grid.agent.x]]; //unshift() e pop() para utilizar como fila
+    this.frontierResult = [...frontier];
   
     const visited = Array(this.grid.rows)
       .fill()
@@ -26,12 +28,13 @@ class BFS {
         if (!visited[neighi][neighj] && this.grid.info[neighi][neighj] != 3) {
           visited[neighi][neighj] = true;
           frontier.unshift([neighi, neighj]);
+          this.frontierResult.unshift([neighi, neighj]);
           this.cameFrom[[neighi, neighj]] = [curri, currj];
         }
       });
     }
     
-    return this.cameFrom;
+    return [this.cameFrom, this.frontierResult];
   }
   
   adjacentCells(i, j) {

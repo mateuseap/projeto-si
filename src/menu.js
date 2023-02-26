@@ -68,11 +68,12 @@ class Menu {
         text("BFS", 280, 555);
         cursor(HAND);
         if (mouseIsPressed) return 1;
-        else return 0;
+        return 0;
       } else if (this.mouseInArea(350, 520, 100, 50)) {
         this.hoverEffect(350, 520, 100, 50);
         text("DFS", 400, 555);
         cursor(HAND);
+        if (mouseIsPressed) return 2;
         return 0;
       } else if (this.mouseInArea(470, 520, 100, 50)) {
         this.hoverEffect(470, 520, 100, 50);

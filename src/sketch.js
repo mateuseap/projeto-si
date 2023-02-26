@@ -26,31 +26,9 @@ function draw() {
   strokeWeight(0.5);
   searchTimeout = defaultTimeout;
 
-  switch (state) {
-    case 0:
-      state = menu.drawMenu();
-      break;
-
-    case 1:
-      algorithm.drawBFS();
-      break;
-
-    case 2:
-      drawDFS();
-      break;
-
-    case 3:
-      drawGreedy();
-      break;
-
-    case 4:
-      drawAstar();
-      break;
-
-    case 5:
-      drawUniCost();
-      break;
-  }
+  if(!state) state = menu.drawMenu();
+  else algorithm.drawSearch(state); 
+  
 }
 
 
