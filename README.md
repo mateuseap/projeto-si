@@ -19,7 +19,7 @@ O ambiente em que o **agente autônomo** se encontra é gerado aleatoriamente e 
 - $\colorbox{#3399CC}{⠀}$ **Água** (Maior custo)
 - $\colorbox{#565656}{⠀}$ **Obstáculo** (Custo ∞)
 
-O **agente autônomo** não pode percorrer blocos que sejam do tipo $\colorbox{#565656}{-}$ **Obstáculo** e além disso, quanto maior for o custo do bloco que o agente estiver percorrendo, mais lento ele fica. Por fim, vale ressaltar que a posição inicial do **agente autônomo** e do objeto alvo (a comida) também são gerados aleatoriamente.
+O **agente autônomo** não pode percorrer blocos que sejam do tipo $\colorbox{#565656}{⠀}$ **Obstáculo** e além disso, quanto maior for o custo do bloco que o agente estiver percorrendo, mais lento ele fica. Por fim, vale ressaltar que a posição inicial do **agente autônomo** e do objeto alvo (a comida) também são gerados aleatoriamente.
 
 ## 💡 Como rodar o projeto pelo navegador
 
