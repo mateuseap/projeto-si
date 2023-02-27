@@ -27,10 +27,19 @@ class Algorithm {
 
   drawFrontierOrPath(i, j, timeoutMS = 0, ...rgbFill) {
     let rgb = [255, 100, 121];
-    if (rgbFill && rgbFill.length === 3) rgb = rgbFill;
+    if (rgbFill && rgbFill.length >= 3) rgb = rgbFill;
 
     if (timeoutMS > 0) setTimeout(this.drawPath.bind(this), timeoutMS, i, j, ...rgb);
     else this.drawPath(i, j, ...rgb);
+
+    if (j === this.grid.target.x && i === this.grid.target.y) {
+      if (timeoutMS > 0) setTimeout(this.grid.drawTarget.bind(this.grid), timeoutMS);
+      else this.grid.drawTarget();
+    }
+    if (j === this.grid.agent.x && i === this.grid.agent.y) {
+      if (timeoutMS > 0) setTimeout(this.grid.drawAgent.bind(this.grid), timeoutMS);
+      else this.grid.drawAgent();
+    }
   }
 
   startSearch() {
@@ -63,24 +72,25 @@ class Algorithm {
     });
   }
 
+  restartDraw() {
+    clear();
+    this.grid.remakeVectors();
+    loop();
+  }
+
   async drawAgentToTargetSpot(i, j, costStepMSAcc, isLast) {
     await sleep(costStepMSAcc).then(() => {
-      this.lastAgentSpot.erase();
-      // Se for fazer com outra cor sem ser branca:
-      /* 
       const { x, y } = this.grid.gridToCanvas(this.grid.agent.x, this.grid.agent.y);
-      this.lastAgentSpot.fill(0, 210, 0, 100);
-      this.lastAgentSpot.circle(x, y, (3 * height) / (4 * rows)); 
-      */
+      this.lastAgentSpot.fill(100, 100, 0);
+      this.lastAgentSpot.circle(x, y, (3 * height) / (4 * rows));
 
       this.grid.agent = createVector(j, i);
       this.lastAgentSpot = this.grid.drawAgent();
 
       if (isLast) {
         targetCollected += 1;
-        // Faz as coisas e reinicia, talvez um sleep aqui faça sentido também
-        // clear();
-        // loop();
+
+        setTimeout(this.restartDraw.bind(this), this.defaultTimeout);
       }
     });
   }
@@ -123,8 +133,8 @@ class Algorithm {
       this.drawFrontierOrPath(currCell[0], currCell[1], this.lastTimeout * this.countCells, 0, 0, 80);
     }
 
-    grid.drawTarget();
-    grid.drawAgent();
+    this.grid.drawTarget();
+    this.grid.drawAgent();
 
     return path;
   }
@@ -137,7 +147,7 @@ class Algorithm {
   }
 
   drawPath(i, j, ...fillRgb) {
-    if (fillRgb && fillRgb.length === 3) fill(...fillRgb);
+    if (fillRgb && fillRgb.length >= 3) fill(...fillRgb);
     else fill(0, 0, 80);
 
     rect(...this.getCellsProps(i, j));

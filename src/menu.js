@@ -79,17 +79,20 @@ class Menu {
       this.hoverEffect(470, 520, 100, 50);
       text('Greedy', 520, 555);
       cursor(HAND);
+      if (mouseIsPressed) return 3;
       return 0;
     } else if (this.mouseInArea(280, 590, 100, 50)) {
       this.hoverEffect(280, 590, 100, 50);
       text('A*', 330, 625);
       cursor(HAND);
+      if (mouseIsPressed) return 4;
       return 0;
     } else if (this.mouseInArea(400, 590, 100, 50)) {
       this.hoverEffect(400, 590, 100, 50);
       textSize(16);
       text('Uniform\nCost', 450, 612);
       cursor(HAND);
+      if (mouseIsPressed) return 5;
       return 0;
     } else {
       return 0;

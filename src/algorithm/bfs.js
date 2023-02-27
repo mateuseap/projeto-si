@@ -3,15 +3,25 @@ class BFS extends Algorithm {
     super(grid);
   }
 
-  bfs() {
+  bfs(gap) {
+    let [oldi, oldj] = [-1, -1];
+    let [curri, currj] = [-1, -1];
+
     while (this.frontier.length) {
-      const [curri, currj] = this.frontier.pop();
+      [oldi, oldj] = [curri, currj];
+      [curri, currj] = this.frontier.pop();
 
       const neighbors = this.adjacentCells(curri, currj);
 
+      this.searchTimeout += gap;
       this.drawFrontierOrPath(curri, currj, this.searchTimeout);
 
-      if (curri === this.grid.target.y && currj === this.grid.target.x) break;
+      if (oldi != -1 && oldj != -1) {
+        this.searchTimeout += gap;
+        this.drawFrontierOrPath(oldi, oldj, this.searchTimeout, 255, 255, 255);
+      }
+
+      if (oldi === this.grid.target.y && oldj === this.grid.target.x) break;
 
       neighbors.forEach(neigh => {
         const neighi = neigh[0];
@@ -21,16 +31,17 @@ class BFS extends Algorithm {
           this.visited[neighi][neighj] = true;
           this.frontier.unshift([neighi, neighj]);
           this.cameFrom[[neighi, neighj]] = [curri, currj];
+          this.drawFrontierOrPath(neighi, neighj, this.searchTimeout);
         }
       });
     }
   }
 
-  runSearch(gapMS = 500, incrementTimeout = 10) {
+  runSearch(gapMS = 500, incrementTimeout = 100) {
     while (true) {
       try {
         this.startSearch();
-        this.bfs();
+        this.bfs(incrementTimeout);
         this.endSearch(gapMS);
 
         break;
