@@ -14,10 +14,10 @@ Esse projeto foi criado utilizando a biblioteca de animação [p5.js](https://p5
 
 O ambiente em que o **agente autônomo** se encontra é gerado aleatoriamente e é composto por um **grid 35x35**, onde cada bloco desse grid pode ser de um desses 4 diferentes tipos de blocos: 
 
-- $\colorbox{#DCCBB5}{-}$ **Areia** (Menor custo)
-- $\colorbox{#869818}{-}$ **Pântano** (Custo médio)
-- $\colorbox{#3399CC}{-}$ **Água** (Maior custo)
-- $\colorbox{#565656}{-}$ **Obstáculo** (Custo ∞)
+- $\colorbox{#DCCBB5}{⠀}$ **Areia** (Menor custo)
+- $\colorbox{#869818}{⠀}$ **Pântano** (Custo médio)
+- $\colorbox{#3399CC}{⠀}$ **Água** (Maior custo)
+- $\colorbox{#565656}{⠀}$ **Obstáculo** (Custo ∞)
 
 O **agente autônomo** não pode percorrer blocos que sejam do tipo $\colorbox{#565656}{-}$ **Obstáculo** e além disso, quanto maior for o custo do bloco que o agente estiver percorrendo, mais lento ele fica. Por fim, vale ressaltar que a posição inicial do **agente autônomo** e do objeto alvo (a comida) também são gerados aleatoriamente.
 
