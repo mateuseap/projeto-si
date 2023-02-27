@@ -1,4 +1,11 @@
 class Algorithm {
+  terrains = {
+    0: '#DCCBB5', // areia menor custo
+    1: '#869818', // pantano custo medio
+    2: '#3399CC', // agua maior custo
+    3: '#565656', // obstaculo custo infinito
+  };
+
   defaultTimeout = 1000;
   directions = [
     [-1, 0],
@@ -22,15 +29,17 @@ class Algorithm {
       .fill()
       .map(() => Array(this.grid.columns).fill(false));
 
-    this.lastAgentSpot = null;
+    this.lastAgentSpotCircle = null;
   }
 
-  drawFrontierOrPath(i, j, timeoutMS = 0, ...rgbFill) {
+  drawFrontierOrPath(i, j, timeoutMS = 0, stroke = false, ...rgbFill) {
     let rgb = [255, 100, 121];
-    if (rgbFill && rgbFill.length >= 3) rgb = rgbFill;
+    if (rgbFill && rgbFill.length >= 1) rgb = rgbFill;
 
-    if (timeoutMS > 0) setTimeout(this.drawPath.bind(this), timeoutMS, i, j, ...rgb);
-    else this.drawPath(i, j, ...rgb);
+    const func = stroke ? this.drawStroke : this.drawPath;
+
+    if (timeoutMS > 0) setTimeout(func.bind(this), timeoutMS, i, j, ...rgb);
+    else func(i, j, ...rgb);
 
     if (j === this.grid.target.x && i === this.grid.target.y) {
       if (timeoutMS > 0) setTimeout(this.grid.drawTarget.bind(this.grid), timeoutMS);
@@ -43,7 +52,7 @@ class Algorithm {
   }
 
   startSearch() {
-    this.lastAgentSpot = this.grid.drawAgent();
+    this.lastAgentSpotCircle = this.grid.drawAgent();
     this.grid.drawTarget();
   }
 
@@ -55,7 +64,7 @@ class Algorithm {
     const path = this.findPath(this.cameFrom);
 
     const stepSize = 100;
-    const costStep = 115;
+    const costStep = 500;
     let costStepMSAcc = 0;
 
     path.reverse().forEach(([i, j], index) => {
@@ -79,13 +88,11 @@ class Algorithm {
   }
 
   async drawAgentToTargetSpot(i, j, costStepMSAcc, isLast) {
-    await sleep(costStepMSAcc).then(() => {
-      const { x, y } = this.grid.gridToCanvas(this.grid.agent.x, this.grid.agent.y);
-      this.lastAgentSpot.fill(100, 100, 0);
-      this.lastAgentSpot.circle(x, y, (3 * height) / (4 * rows));
-
+    await sleep(costStepMSAcc).then(() => {  
+      // if (!isLast) this.lastAgentSpotCircle.setAlpha(50);
+      
       this.grid.agent = createVector(j, i);
-      this.lastAgentSpot = this.grid.drawAgent();
+      this.lastAgentSpotCircle = this.grid.drawAgent();
 
       if (isLast) {
         targetCollected += 1;
@@ -127,7 +134,14 @@ class Algorithm {
       if (currCell[0] === agentCell[0] && currCell[1] === agentCell[1]) break;
       path.push(currCell);
       this.countCells += 1;
-      this.drawFrontierOrPath(currCell[0], currCell[1], this.lastTimeout * this.countCells, 0, 0, 80);
+      this.drawFrontierOrPath(currCell[0], currCell[1], this.lastTimeout * this.countCells, true, 'rgb(0, 0, 80)');
+      this.drawFrontierOrPath(
+        currCell[0],
+        currCell[1],
+        this.lastTimeout * this.countCells,
+        false,
+        this.terrains[this.grid.info[currCell[0]][currCell[1]]]
+      );
     }
 
     this.drawPath(agentCell[0], agentCell[1]);
@@ -146,8 +160,15 @@ class Algorithm {
     return [cellX, cellY, this.grid.cellWidth, this.grid.cellHeight];
   }
 
+  drawStroke(i, j, color) {
+    stroke(color);
+    strokeWeight(3);
+
+    rect(...this.getCellsProps(i, j));
+  }
+
   drawPath(i, j, ...fillRgb) {
-    if (fillRgb && fillRgb.length >= 3) fill(...fillRgb);
+    if (fillRgb && fillRgb.length >= 1) fill(...fillRgb);
     else fill(0, 0, 80);
 
     rect(...this.getCellsProps(i, j));

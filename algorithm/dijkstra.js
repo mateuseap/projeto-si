@@ -21,7 +21,7 @@ class Dijkstra extends Algorithm {
 
       if (oldi != -1 && oldj != -1) {
         this.searchTimeout += gap;
-        this.drawFrontierOrPath(oldi, oldj, this.searchTimeout, 255, 255, 255);
+        this.drawFrontierOrPath(oldi, oldj, this.searchTimeout, false, 255, 255, 255);
       }
 
       if (oldi === this.grid.target.y && oldj === this.grid.target.x) break;
@@ -44,6 +44,8 @@ class Dijkstra extends Algorithm {
         }
       });
     }
+
+    
   }
 
   runSearch(gapMS = 500, incrementTimeout = 100) {

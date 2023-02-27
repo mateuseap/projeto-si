@@ -22,14 +22,16 @@ class Grid {
     this.target = this.createRandomVector();
   }
 
-  drawAgent(i, j) {
-    fill(255, 0, 0);
+  drawAgent(i, j, opacity = 255) {
+    strokeWeight(1);
+    fill(255, 0, 0, opacity);
     const { x, y } = this.gridToCanvas(i || this.agent.x, j || this.agent.y);
 
     return circle(x, y, (3 * height) / (4 * rows));
   }
 
   drawTarget(i, j) {
+    strokeWeight(1);
     fill('#ff8c00');
     const { x, y } = this.gridToCanvas(i || this.target.x, j || this.target.y);
 
