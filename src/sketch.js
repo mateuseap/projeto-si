@@ -13,6 +13,7 @@ let menu;
 let grid;
 let states;
 let countP;
+let algP;
 
 function getTargetCountText() {
   return `Comidas coletadas: ${targetCollected <= 0 ? 0 : targetCollected}`;
@@ -23,37 +24,50 @@ function updateParagraph(text = '') {
 }
 
 function setup() {
-  createCanvas(800, 800);
+  createCanvas(800, 875);
+
   countP = createP(getTargetCountText());
   countP.style('font-size', '16px');
+  countP.style('font-family', 'Ubuntu');
   countP.style('color', 'white');
-  countP.style('background-color', 'black');
-  countP.style('padding', '1rem');
-  countP.position(900, 0);
+  countP.style('background-color', '#1C315E');
+  countP.position(10, 800);
+
+
 
   menu = new Menu(terrains);
   grid = new Grid(rows, columns, terrains);
-  states = { 1: BFS, 2: DFS, 3: Greedy, 4: Astar, 5: Dijkstra };
+  states = { 1: BFS, 2: DFS, 3: Greedy, 4: Dijkstra, 5: Astar };
   statesName = { 1: 'BFS', 2: 'DFS' };
 }
 
 function draw() {
-  background(0);
+  background('#1C315E');
   strokeWeight(0.5);
+  updateParagraph();
+
+  const backButton = createButton('back to menu');
+  backButton.position(700, 810);
+  backButton.style('font-family', 'Ubuntu');
+  backButton.mousePressed(() => {
+    state = 0;
+  });
 
   const algP = createP();
   algP.style('font-size', '16px');
+  algP.style('font-family', 'Ubuntu');
   algP.style('color', 'white');
-  algP.style('background-color', 'black');
-  algP.style('padding', '1rem');
-  algP.position(900, 100);
+  algP.style('background-color', '#1C315E');
+  algP.position(10, 830);
+
 
   if (!state) {
     state = menu.drawMenu();
+    targetCollected = 0;
     algP.hide();
   } else {
-    algP.html(states[state].name);
-    updateParagraph();
+    algP.html('Search algorithm: ' + states[state].name);
+
     noLoop();
 
     const algorithm = new states[state](grid);

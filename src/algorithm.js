@@ -122,9 +122,6 @@ class Algorithm {
     this.drawPath(targetCell[0], targetCell[1]);
     path.push(targetCell);
 
-    this.drawPath(agentCell[0], agentCell[1]);
-    path.push(agentCell);
-
     while (true) {
       currCell = cameFrom[currCell];
       if (currCell[0] === agentCell[0] && currCell[1] === agentCell[1]) break;
@@ -133,8 +130,11 @@ class Algorithm {
       this.drawFrontierOrPath(currCell[0], currCell[1], this.lastTimeout * this.countCells, 0, 0, 80);
     }
 
-    this.grid.drawTarget();
+    this.drawPath(agentCell[0], agentCell[1]);
+    path.push(agentCell);
+
     this.grid.drawAgent();
+    this.grid.drawTarget();
 
     return path;
   }

@@ -5,7 +5,7 @@ class Grid {
     this.rows = rows;
     this.columns = columns;
     this.cellWidth = width / this.columns;
-    this.cellHeight = height / this.rows;
+    this.cellHeight = (height-75) / this.rows;
 
     for (let i = 0; i < this.rows; i++) {
       this.info[i] = new Array(columns);

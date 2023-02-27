@@ -6,7 +6,7 @@ class Menu {
   hoverEffect(x, y, width, height) {
     stroke(255, 255, 255);
     strokeWeight(2);
-    fill(255, 0, 0);
+    fill('#88A47C');
     rect(x, y, width, height, 5);
     fill(0);
   }
@@ -38,6 +38,7 @@ class Menu {
 
     fill(255, 255, 255);
     textSize(40);
+    textFont("Ubuntu");
     textAlign(CENTER);
     text('Welcome!', 400, 180);
 
@@ -57,11 +58,8 @@ class Menu {
     text('BFS', 280, 555);
     text('DFS', 400, 555);
     text('Greedy', 520, 555);
-    text('A*', 330, 625);
-
-    textSize(16);
-    text('Uniform\nCost', 450, 612);
-    textSize(24);
+    text('Dijkstra', 330, 625);
+    text('A*', 450, 625);
 
     if (this.mouseInArea(230, 520, 100, 50)) {
       this.hoverEffect(230, 520, 100, 50);
@@ -83,14 +81,13 @@ class Menu {
       return 0;
     } else if (this.mouseInArea(280, 590, 100, 50)) {
       this.hoverEffect(280, 590, 100, 50);
-      text('A*', 330, 625);
+      text('Dijkstra', 330, 625);
       cursor(HAND);
       if (mouseIsPressed) return 4;
       return 0;
     } else if (this.mouseInArea(400, 590, 100, 50)) {
       this.hoverEffect(400, 590, 100, 50);
-      textSize(16);
-      text('Uniform\nCost', 450, 612);
+      text('A*', 450, 625);
       cursor(HAND);
       if (mouseIsPressed) return 5;
       return 0;
