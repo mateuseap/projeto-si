@@ -74,7 +74,7 @@ class Algorithm {
 
   restartDraw() {
     clear();
-    this.grid.remakeVectors();
+    this.grid.remakeTarget();
     loop();
   }
 

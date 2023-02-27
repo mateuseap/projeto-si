@@ -64,6 +64,10 @@ class Grid {
     this.target = this.createRandomVector();
   }
 
+  remakeTarget() {
+    this.target = this.createRandomVector();
+  }
+
   drawGrid() {
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < this.columns; j++) {
