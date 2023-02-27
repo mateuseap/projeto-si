@@ -61,20 +61,26 @@ class Algorithm {
   }
 
   drawPathTimeout() {
-    const path = this.findPath(this.cameFrom);
+    let path = this.findPath(this.cameFrom);
+    path = path.reverse();
 
     const stepSize = 100;
     const costStep = 500;
     let costStepMSAcc = 0;
 
-    path.reverse().forEach(([i, j], index) => {
+    path.forEach(([i, j], index) => {
       const isLast = index + 1 === path.length;
+      let prev;
+
+      if (index != 0) prev = path[index - 1];
+
       costStepMSAcc += costStep * this.grid.info[j][i];
       setTimeout(
         this.drawAgentToTargetSpot.bind(this),
         this.lastTimeout * this.countCells + stepSize * index,
         i,
         j,
+        prev,
         costStepMSAcc,
         isLast
       );
@@ -87,10 +93,11 @@ class Algorithm {
     loop();
   }
 
-  async drawAgentToTargetSpot(i, j, costStepMSAcc, isLast) {
-    await sleep(costStepMSAcc).then(() => {  
+  async drawAgentToTargetSpot(i, j, prev, costStepMSAcc, isLast) {
+    await sleep(costStepMSAcc).then(() => {
       // if (!isLast) this.lastAgentSpotCircle.setAlpha(50);
-      
+      const [prevI, prevJ] = prev ? prev : [-1, -1];
+
       this.grid.agent = createVector(j, i);
       this.lastAgentSpotCircle = this.grid.drawAgent();
 
@@ -98,6 +105,15 @@ class Algorithm {
         targetCollected += 1;
 
         setTimeout(this.restartDraw.bind(this), this.defaultTimeout);
+      }
+
+      if (prevI !== -1 && prevJ !== -1) {
+        erase();
+        rect(...this.getCellsProps(prevI, prevJ));
+        noErase();
+
+        fill(this.terrains[this.grid.info[prevI][prevJ]]);
+        this.drawStroke(prevI, prevJ, 'rgb(0, 0, 80)');
       }
     });
   }
