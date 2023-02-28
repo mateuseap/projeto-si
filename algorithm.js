@@ -6,7 +6,7 @@ class Algorithm {
     3: '#565656', // obstaculo custo infinito
   };
 
-  defaultTimeout = 1000;
+  defaultTimeout = 2000;
   directions = [
     [-1, 0],
     [0, -1],
@@ -61,27 +61,25 @@ class Algorithm {
   }
 
   drawPathTimeout() {
-    let path = this.findPath(this.cameFrom);
-    path = path.reverse();
+    const path = this.findPath(this.cameFrom).reverse();
 
-    const stepSize = 100;
-    const costStep = 500;
+    const stepSize = 600;
     let costStepMSAcc = 0;
 
     path.forEach(([i, j], index) => {
       const isLast = index + 1 === path.length;
-      let prev;
+      const prev = index > 0 ? path[index - 1] : [-1, -1];
+      const [prevI, prevJ] = prev;
 
-      if (index != 0) prev = path[index - 1];
+      costStepMSAcc += index > 0 ? this.grid.info[prevI][prevJ] + 1 : 1;
 
-      costStepMSAcc += costStep * this.grid.info[j][i];
       setTimeout(
         this.drawAgentToTargetSpot.bind(this),
-        this.lastTimeout * this.countCells + stepSize * index,
+        this.lastTimeout * this.countCells + stepSize * costStepMSAcc,
         i,
         j,
-        prev,
-        costStepMSAcc,
+        prevI,
+        prevJ,
         isLast
       );
     });
@@ -93,29 +91,24 @@ class Algorithm {
     loop();
   }
 
-  async drawAgentToTargetSpot(i, j, prev, costStepMSAcc, isLast) {
-    await sleep(costStepMSAcc).then(() => {
-      // if (!isLast) this.lastAgentSpotCircle.setAlpha(50);
-      const [prevI, prevJ] = prev ? prev : [-1, -1];
+  drawAgentToTargetSpot(i, j, prevI, prevJ, isLast) {
+    this.grid.agent = createVector(j, i);
+    this.lastAgentSpotCircle = this.grid.drawAgent();
 
-      this.grid.agent = createVector(j, i);
-      this.lastAgentSpotCircle = this.grid.drawAgent();
+    if (isLast) {
+      targetCollected += 1;
 
-      if (isLast) {
-        targetCollected += 1;
+      setTimeout(this.restartDraw.bind(this), 150);
+    }
 
-        setTimeout(this.restartDraw.bind(this), this.defaultTimeout);
-      }
+    if (prevI !== -1 && prevJ !== -1) {
+      erase();
+      rect(...this.getCellsProps(prevI, prevJ));
+      noErase();
 
-      if (prevI !== -1 && prevJ !== -1) {
-        erase();
-        rect(...this.getCellsProps(prevI, prevJ));
-        noErase();
-
-        fill(this.terrains[this.grid.info[prevI][prevJ]]);
-        this.drawStroke(prevI, prevJ, 'rgb(0, 0, 80)');
-      }
-    });
+      fill(this.terrains[this.grid.info[prevI][prevJ]]);
+      this.drawStroke(prevI, prevJ, 'rgb(0, 0, 80)');
+    }
   }
 
   adjacentCells(i, j) {
