@@ -48,7 +48,26 @@ http-server
 
 Ele mostrará em que URL o código será executado, então, você só precisa abrir a URL em seu navegador:
 
-![http-servidor](https://i.imgur.com/DMHbcdU.png)
+![http-server](https://i.imgur.com/DMHbcdU.png)
+
+## 📋 Relatório de post mortem
+
+1. **Maiores desafios, erros e aprendizados**
+    - Dividir as tarefas entre os membros da equipe
+    - Representar os algoritmos de busca visualmente (nos deparamos com diversos erros durante esse processo)
+    - Definir a arquitetura do projeto
+
+2. **Divisão do trabalho em grupo**
+    - Menu, mapa e movimentação do agente: Williams
+    - Algoritmos de busca: Guilherme, Mateus, Williams e Lucca
+    - Refatoração do código: Guilherme, Mateus e Lucca
+
+3. **Arquitetura e tecnologias utilizadas**
+    - [p5.js](https://p5js.org/)
+    - [Prettier](https://prettier.io/)
+    - [GitHub](https://github.com/)
+    - [GitHub Pages](https://pages.github.com/)
+    - [http-server](https://www.npmjs.com/package/http-server)
 
 ## 👥 Grupo
 
