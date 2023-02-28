@@ -42,16 +42,8 @@ class Greedy extends Algorithm {
   }
 
   runSearch(gapMS = 500, incrementTimeout = 100) {
-    while (true) {
-      try {
-        this.startSearch();
-        this.greedy(incrementTimeout);
-        this.endSearch(gapMS);
-
-        break;
-      } catch (error) {
-        console.error(error);
-      }
-    }
+    this.startSearch();
+    this.greedy(incrementTimeout);
+    this.endSearch(gapMS);
   }
 }

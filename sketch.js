@@ -61,7 +61,6 @@ function draw() {
     algP.hide();
   } else {
     algP.html('Search algorithm: ' + states[state].name);
-
     noLoop();
 
     const algorithm = new states[state](grid);
