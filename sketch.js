@@ -13,10 +13,11 @@ let menu;
 let grid;
 let states;
 let countP;
-let algP;
+let cnvX;
+let cnvY;
 
 function getTargetCountText() {
-  return `Comidas coletadas: ${targetCollected <= 0 ? 0 : targetCollected}`;
+  return state === 0 ? '' : 'Comidas coletadas: ' + targetCollected;
 }
 
 function updateParagraph(text = '') {
@@ -24,14 +25,17 @@ function updateParagraph(text = '') {
 }
 
 function setup() {
-  createCanvas(800, 875);
+  let cnv = createCanvas(800, 875);
+  cnvX = (windowWidth - width) / 2;
+  cnvY = (windowHeight - height) / 2;
+  cnv.position(cnvX, cnvY);
 
   countP = createP(getTargetCountText());
   countP.style('font-size', '16px');
   countP.style('font-family', 'Ubuntu');
   countP.style('color', 'white');
   countP.style('background-color', '#1C315E');
-  countP.position(10, 800);
+  countP.position(cnvX + 10, cnvY + 800);
 
   menu = new Menu(terrains);
   grid = new Grid(rows, columns, terrains);
@@ -53,7 +57,7 @@ function draw() {
   algP.style('font-family', 'Ubuntu');
   algP.style('color', 'white');
   algP.style('background-color', '#1C315E');
-  algP.position(10, 830);
+  algP.position(cnvX + 10, cnvY + 830);
 
   if (!state) {
     state = menu.drawMenu();
