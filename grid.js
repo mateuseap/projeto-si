@@ -1,7 +1,7 @@
 class Grid {
   constructor(rows, columns, terrains) {
     this.info = new Array(rows);
-    this.terrains = terrains;
+    terrains = terrains;
     this.rows = rows;
     this.columns = columns;
     this.cellWidth = width / this.columns;
@@ -77,7 +77,7 @@ class Grid {
         const cellY = i * this.cellHeight;
         // desenha
         stroke(0);
-        fill(this.terrains[this.info[i][j]]);
+        fill(terrains[this.info[i][j]]);
         rect(cellX, cellY, this.cellWidth, this.cellHeight);
       }
     }

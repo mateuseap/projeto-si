@@ -1,6 +1,6 @@
 class Menu {
   constructor(terrains) {
-    this.terrains = terrains;
+    terrains = terrains;
   }
 
   hoverEffect(x, y, width, height) {

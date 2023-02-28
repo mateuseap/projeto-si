@@ -33,25 +33,20 @@ function setup() {
   countP.style('background-color', '#1C315E');
   countP.position(10, 800);
 
-
-
   menu = new Menu(terrains);
   grid = new Grid(rows, columns, terrains);
   states = { 1: BFS, 2: DFS, 3: Greedy, 4: Dijkstra, 5: Astar };
   statesName = { 1: 'BFS', 2: 'DFS' };
 }
 
-function draw() {
+const resetDraw = () => {
   background('#1C315E');
   strokeWeight(0.5);
   updateParagraph();
+};
 
-  const backButton = createButton('back to menu');
-  backButton.position(700, 810);
-  backButton.style('font-family', 'Ubuntu');
-  backButton.mousePressed(() => {
-    state = 0;
-  });
+function draw() {
+  resetDraw();
 
   const algP = createP();
   algP.style('font-size', '16px');
@@ -59,7 +54,6 @@ function draw() {
   algP.style('color', 'white');
   algP.style('background-color', '#1C315E');
   algP.position(10, 830);
-
 
   if (!state) {
     state = menu.drawMenu();

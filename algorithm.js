@@ -1,11 +1,4 @@
 class Algorithm {
-  terrains = {
-    0: '#DCCBB5', // areia menor custo
-    1: '#869818', // pantano custo medio
-    2: '#3399CC', // agua maior custo
-    3: '#565656', // obstaculo custo infinito
-  };
-
   defaultTimeout = 2000;
   directions = [
     [-1, 0],
@@ -61,7 +54,9 @@ class Algorithm {
   }
 
   drawPathTimeout() {
+    this.restartDraw(false);
     const path = this.findPath(this.cameFrom).reverse();
+    const initialGap = this.lastTimeout * this.countCells;
 
     const stepSize = 600;
     let costStepMSAcc = 0;
@@ -75,7 +70,7 @@ class Algorithm {
 
       setTimeout(
         this.drawAgentToTargetSpot.bind(this),
-        this.lastTimeout * this.countCells + stepSize * costStepMSAcc,
+        initialGap + stepSize * costStepMSAcc,
         i,
         j,
         prevI,
@@ -85,10 +80,15 @@ class Algorithm {
     });
   }
 
-  restartDraw() {
+  restartDraw(remakeTarget = true) {
     clear();
-    this.grid.remakeTarget();
-    loop();
+    if (remakeTarget) {
+      this.grid.remakeTarget();
+      loop();
+    } else {
+      resetDraw();
+      this.grid.drawGrid();
+    }
   }
 
   drawAgentToTargetSpot(i, j, prevI, prevJ, isLast) {
@@ -106,7 +106,7 @@ class Algorithm {
       rect(...this.getCellsProps(prevI, prevJ));
       noErase();
 
-      fill(this.terrains[this.grid.info[prevI][prevJ]]);
+      fill(terrains[this.grid.info[prevI][prevJ]]);
       this.drawStroke(prevI, prevJ, 'rgb(0, 0, 80)');
     }
   }
@@ -143,13 +143,13 @@ class Algorithm {
       if (currCell[0] === agentCell[0] && currCell[1] === agentCell[1]) break;
       path.push(currCell);
       this.countCells += 1;
-      this.drawFrontierOrPath(currCell[0], currCell[1], this.lastTimeout * this.countCells, true, 'rgb(0, 0, 80)');
+      this.drawFrontierOrPath(currCell[0], currCell[1], this.lastTimeout * this.countCells, true, '#FF0303');
       this.drawFrontierOrPath(
         currCell[0],
         currCell[1],
         this.lastTimeout * this.countCells,
         false,
-        this.terrains[this.grid.info[currCell[0]][currCell[1]]]
+        terrains[this.grid.info[currCell[0]][currCell[1]]]
       );
     }
 
@@ -178,7 +178,7 @@ class Algorithm {
 
   drawPath(i, j, ...fillRgb) {
     if (fillRgb && fillRgb.length >= 1) fill(...fillRgb);
-    else fill(0, 0, 80);
+    else fill(0, 0, 0);
 
     rect(...this.getCellsProps(i, j));
   }
